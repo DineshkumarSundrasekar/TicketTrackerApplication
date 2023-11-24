@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Ticket Tracker Application</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+	<style>
+		body {
+			font-family: 'Arial', sans-serif;
+			margin: 0;
+			padding: 0;
+			background-color: #f8f9fa;
+		}
+
+		nav {
+			background-color: blue;
+		}
+
+		nav a {
+			color: white;
+			font-weight: bold;
+		}
+
+		.container-fluid {
+			padding: 0 20px;
+		}
+
+		h1 {
+			margin-top: 20px;
+			margin-bottom: 20px;
+		}
+	</style>
+
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-sm">
+		<div class="container-fluid">
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a class="nav-link" href="#" style="color: white;">Ticket Tracker Application</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#" style="color: white;">Tickets</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/createticket" style="color: white;">New Ticket</a>
+				</li>
+			</ul>
+			<div>
+				<input type="text" id="sid" placeholder="Enter Ticket Tittle">
+				<button onclick="searchByTittle()">Search</button>
+				<script>
+					function searchByTittle() {
+						var searchQuery = document.getElementById("sid").value;
+						var searchUrl = "/search?ticketTittle=" + encodeURIComponent(searchQuery); // Fix: call the function and concatenate its result
+						window.location.href = searchUrl;
+					}
+				</script>
+			</div>
+		</div>
+	</nav>
+	<h1>List Of Tickets</h1>
+	<div class="container mt-3">
+		<table class="table table-striped" id="t">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Ticket Title</th>
+					<th>Ticket Short Description</th>
+					<th>Ticket Created On</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="ticket : ${listOfTickets}">
+					<td th:text="${ticket.id}" />
+					<td th:text="${ticket.ticketTittle}" />
+					<td th:text="${ticket.ticketShortDescription}" />
+					<td th:text="${ticket.ticketCreatedOn}" />
+					<td>
+						<div class="btn-group" role="group">
+							<a th:href="@{/delete/{id}(id=${ticket.id})}" class="btn btn-danger btn-sm">Delete</a>
+							<a th:href="@{/view/{id}(id=${ticket.id})}" class="btn btn-info btn-sm">View</a>
+							<a th:href="@{/edit/{id}(id=${ticket.id})}" class="btn btn-info btn-sm">Update</a>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+
+</html>
